@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-redis="http://www.springframework.org/schema/integration/redis"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:stream="http://www.springframework.org/schema/integration/stream"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="   
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+	http://www.springframework.org/schema/data/mongo
+    http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+    http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+	http://www.springframework.org/schema/integration
+	http://www.springframework.org/schema/integration/spring-integration-2.1.xsd
+	http://www.springframework.org/schema/integration/redis
+	http://www.springframework.org/schema/integration/redis/spring-integration-redis-2.1.xsd
+	http://www.springframework.org/schema/integration/stream
+	http://www.springframework.org/schema/integration/stream/spring-integration-stream-2.1.xsd
+	http://code.alibabatech.com/schema/dubbo
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!--&lt;!&ndash; 系统管理，安全相关实体的管理类,包括用户、角色、菜单. 接口实现   &ndash;&gt;-->
+	<!--<bean id="systemService" class="com.fsnip.jg.modules.sys.service.impl.SystemService"/>-->
+	<!--&lt;!&ndash; 字典Service 接口实现   &ndash;&gt;-->
+	<!--<bean id="dictService" class="com.fsnip.jg.modules.sys.service.impl.DictService"/>-->
+	<!--&lt;!&ndash; 字典Service 接口实现   &ndash;&gt;-->
+	<!--<bean id="oaNotifyService" class="com.fsnip.jg.modules.oa.service.impl.OaNotifyService"/>-->
+	<!--&lt;!&ndash; 机构Service 接口实现   &ndash;&gt;-->
+	<!--<bean id="testAuditService" class="com.fsnip.jg.modules.oa.service.impl.TestAuditService"/>-->
+
+
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="jg-data-provider"  />
+   
+    <!-- 使用zookeeper注册中心暴露服务地址 -->  
+    <dubbo:registry address="${dubbo.zookeeper.address}" protocol="${dubbo.zookeeper.protocol}"/> 
+    
+    <!-- 用dubbo协议在20880端口暴露服务 -->  
+    <dubbo:protocol
+		name="${dubbo.protocol.name}" 
+	    port="${dubbo.protocol.port}" 
+	    threadpool="fixed" 
+    	threads="100"
+		buffer="8192"
+		accepts="1000" 
+		accesslog="true"
+		payload="88388608" 
+		heartbeat="0" />
+
+
+	<!-- 声明需要暴露的服务接口 -->
+
+
+
+	<!-- 系统管理，安全相关实体的管理类,包括用户、角色、菜单. 接口  tanfy 2017.04.19 -->
+	<dubbo:service interface="com.fsnip.jg.modules.sys.service.ISystemService" ref="systemService" version="1.0.0"/>
+	<!-- 字典Service  tanfy 2017.04.20 -->
+	<dubbo:service interface="com.fsnip.jg.modules.sys.service.IDictService" ref="dictService" version="1.0.0"/>
+	<!-- 通知通告Service  tanfy 2017.04.20 -->
+	<dubbo:service interface="com.fsnip.jg.modules.oa.service.oanotify.IOaNotifyService" ref="oaNotifyService" version="1.0.0"/>
+
+	<!-- 机构Service  tanfy 2017.04.21 -->
+	<dubbo:service interface="com.fsnip.jg.modules.sys.service.office.IOfficeService" ref="officeService" version="1.0.0"/>
+
+	<!-- 栏目Service  tanfy 2017.05.12 -->
+	<dubbo:service interface="com.fsnip.jg.modules.cms.service.category.ICategoryService" ref="categoryService" version="1.0.0"/>
+	<!-- 业务表Service  tanfy 2017.05.12 -->
+	<dubbo:service interface="com.fsnip.jg.modules.gen.service.gentable.IGenTableService" ref="genTableService" version="1.0.0"/>
+	<!-- 审批Service  tanfy 2017.05.12 -->
+	<dubbo:service interface="com.fsnip.jg.modules.oa.service.testaudit.ITestAuditService" ref="testAuditService" version="1.0.0"/>
+	<!-- 评论Service  tanfy 2017.05.12 -->
+	<dubbo:service interface="com.fsnip.jg.modules.cms.service.comment.ICommentService" ref="commentService" version="1.0.0"/>
+	<!-- 留言Service  tanfy 2017.05.12 -->
+	<dubbo:service interface="com.fsnip.jg.modules.cms.service.guestbook.IGuestbookService" ref="guestbookService" version="1.0.0"/>
+	<!-- 统计Service  tanfy 2017.05.12 -->
+	<dubbo:service interface="com.fsnip.jg.modules.cms.service.stats.IStatsService" ref="statsService" version="1.0.0"/>
+	<!-- 站点Service  tanfy 2017.05.12 -->
+	<dubbo:service interface="com.fsnip.jg.modules.cms.service.site.ISiteService" ref="siteService" version="1.0.0"/>
+	<!-- 区域Service  tanfy 2017.05.12 -->
+	<dubbo:service interface="com.fsnip.jg.modules.sys.service.area.IAreaService" ref="areaService" version="1.0.0"/>
+
+	<!-- 日志Service  tanfy 2017.05.12 -->
+	<dubbo:service interface="com.fsnip.jg.modules.sys.service.ILogService" ref="logService" version="1.0.0"/>
+	<!-- 生成方案Service  tanfy 2017.05.12 -->
+	<dubbo:service interface="com.fsnip.jg.modules.gen.service.genscheme.IGenSchemeService" ref="genSchemeService" version="1.0.0"/>
+
+	<!-- 单表生成Service  tanfy 2017.05.12 -->
+	<dubbo:service interface="com.fsnip.jg.test.service.testdata.ITestDataService" ref="testDataService" version="1.0.0"/>
+	<!-- 主子表生成Service  tanfy 2017.05.12 -->
+	<dubbo:service interface="com.fsnip.jg.test.service.testdatamain.ITestDataMainService" ref="testDataMainService" version="1.0.0"/>
+	<!-- 树结构生成Service  tanfy 2017.05.12 -->
+	<dubbo:service interface="com.fsnip.jg.test.service.testtree.ITestTreeService" ref="testTreeService" version="1.0.0"/>
+
+	<!-- 流程定义相关Service  tanfy 2017.05.15 -->
+	<dubbo:service interface="com.fsnip.jg.modules.act.service.IActTaskService" ref="actTaskService" version="1.0.0"/>
+	<!-- 流程定义相关Service  tanfy 2017.05.15 -->
+	<dubbo:service interface="com.fsnip.jg.modules.act.service.IActModelService" ref="actModelService" version="1.0.0"/>
+	<!-- 流程定义相关Service  tanfy 2017.05.15 -->
+	<dubbo:service interface="com.fsnip.jg.modules.act.service.IActProcessService" ref="actProcessService" version="1.0.0"/>
+
+	<!-- 机构Service  tanfy 2017.05.15 -->
+	<dubbo:service interface="com.fsnip.jg.modules.sys.service.office.IOfficeService" ref="officeService" version="1.0.0"/>
+	<!-- 角色Role Service  tanfy 2017.05.15 -->
+	<dubbo:service interface="com.fsnip.jg.modules.sys.service.role.IRoleService" ref="roleService" version="1.0.0"/>
+	<!-- 区域Service  tanfy 2017.05.15 -->
+	<dubbo:service interface="com.fsnip.jg.modules.sys.service.area.IAreaService" ref="areaService" version="1.0.0"/>
+
+	<!-- 文章Service  tanfy 2017.05.15 -->
+	<dubbo:service interface="com.fsnip.jg.modules.cms.service.article.IArticleService" ref="articleService" version="1.0.0"/>
+	<!-- 站点Service  tanfy 2017.05.15 -->
+	<dubbo:service interface="com.fsnip.jg.modules.cms.service.articledata.IArticleDataService" ref="articleDataService" version="1.0.0"/>
+	<!-- 文件相关 Service   tanfy 2017.05.15 -->
+	<dubbo:service interface="com.fsnip.jg.modules.cms.service.filetpl.IFileTplService" ref="fileTplService" version="1.0.0"/>
+
+	<!-- 通知通告Service   tanfy 2017.05.15 -->
+	<dubbo:service interface="com.fsnip.jg.modules.oa.service.oanotify.IOaNotifyService" ref="oaNotifyService" version="1.0.0"/>
+
+
+
+
+</beans>
